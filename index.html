@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>강서영 | AI Developer Portfolio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2128;
+    --border: #30363d;
+    --green: #3fb950;
+    --green-dim: #1a4a22;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --orange: #f0883e;
+    --red: #ff7b72;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --text-bright: #e6edf3;
+    --cursor: #3fb950;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--green);
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.05rem;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--green); }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 0; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 3rem;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 78px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(63,185,80,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .terminal-window {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .terminal-bar {
+    background: var(--bg3);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 13px; height: 13px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #28c840; }
+
+  .terminal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-left: 0.5rem;
+  }
+
+  .terminal-body {
+    padding: 2rem 2.5rem;
+    min-height: 400px;
+  }
+
+  .terminal-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin-bottom: 0.2rem;
+  }
+
+  .prompt { color: var(--green); }
+  .cmd { color: var(--text-bright); }
+  .output-key { color: var(--blue); }
+  .output-val { color: var(--text); }
+  .output-str { color: var(--orange); }
+  .output-comment { color: var(--text-dim); }
+  .output-green { color: var(--green); }
+  .output-purple { color: var(--purple); }
+
+  .cursor {
+    display: inline-block;
+    width: 10px; height: 1.1em;
+    background: var(--cursor);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .hero-tagline {
+    margin-top: 2.5rem;
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    line-height: 1.9;
+    border-left: 3px solid var(--green);
+    padding-left: 1.2rem;
+  }
+
+  .hero-tagline strong { color: var(--text-bright); }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .about-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.6rem;
+  }
+
+  .about-card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--green);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .about-card p { font-size: 1rem; color: var(--text); line-height: 1.8; }
+  .about-full { grid-column: 1 / -1; }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--bg2); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .projects-grid .project-card.featured {
+    grid-column: auto;
+    border-color: var(--border);
+  }
+
+  .project-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.6rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .project-card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+  }
+
+  .project-card.featured {
+    grid-column: 1 / -1;
+    border-color: var(--green-dim);
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-bright);
+  }
+
+  .project-award {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .award-gold { background: rgba(240,136,62,0.15); color: var(--orange); border: 1px solid rgba(240,136,62,0.3); }
+  .award-silver { background: rgba(88,166,255,0.12); color: var(--blue); border: 1px solid rgba(88,166,255,0.25); }
+  .award-bronze { background: rgba(188,140,255,0.12); color: var(--purple); border: 1px solid rgba(188,140,255,0.25); }
+  .award-green { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.25); }
+  .award-ongoing { background: rgba(240,136,62,0.1); color: var(--orange); border: 1px solid rgba(240,136,62,0.2); }
+
+  .project-period {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 0.6rem;
+  }
+
+  .project-desc { font-size: 0.95rem; color: var(--text); margin-bottom: 1rem; line-height: 1.7; }
+
+  .project-role { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 1rem; }
+  .project-role span { color: var(--blue); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-dim);
+  }
+
+  /* ── AWARDS ── */
+  #awards { background: var(--bg); }
+
+  .timeline { position: relative; padding-left: 2rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item { position: relative; margin-bottom: 2.5rem; }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.35rem;
+    top: 0.4rem;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--green);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--green);
+  }
+
+  .timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+
+  .timeline-title { font-size: 1.05rem; font-weight: 600; color: var(--text-bright); margin-bottom: 0.3rem; }
+  .timeline-org { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--green); margin-bottom: 0.4rem; }
+  .timeline-desc { font-size: 0.92rem; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--bg2); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.3rem;
+  }
+
+  .skill-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+  }
+
+  .skill-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .skill-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .badge-lang { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.2); }
+  .badge-fw { background: rgba(88,166,255,0.12); color: var(--blue); border: 1px solid rgba(88,166,255,0.2); }
+  .badge-ai { background: rgba(188,140,255,0.12); color: var(--purple); border: 1px solid rgba(188,140,255,0.2); }
+  .badge-hw { background: rgba(240,136,62,0.12); color: var(--orange); border: 1px solid rgba(240,136,62,0.2); }
+  .badge-tool { background: rgba(201,209,217,0.08); color: var(--text-dim); border: 1px solid var(--border); }
+
+  /* ── ACTIVITIES ── */
+  #activities { background: var(--bg); }
+
+  .activities-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.3rem;
+    text-align: center;
+  }
+
+  .stat-num { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 700; color: var(--green); }
+  .stat-label { font-size: 0.9rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+  .activity-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+  .activity-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .activity-name { color: var(--text); }
+  .activity-hours { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--green); white-space: nowrap; margin-left: 0.8rem; }
+
+  .activity-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin: 1.5rem 0 0.6rem;
+  }
+
+  /* ── VISION ── */
+  #vision { background: var(--bg2); }
+
+  .vision-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vision-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(to bottom, var(--green), var(--blue));
+  }
+
+  .vision-block p { font-size: 1rem; line-height: 1.9; color: var(--text); padding-left: 1rem; }
+  .vision-block p + p { margin-top: 1rem; }
+  .vision-block strong { color: var(--text-bright); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+
+  .contact-inner { text-align: center; }
+  .contact-inner p { font-size: 1rem; color: var(--text-dim); margin-bottom: 2rem; line-height: 1.8; }
+
+  .contact-links { display: flex; justify-content: center; gap: 1rem; }
+
+  .contact-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--bg2);
+  }
+
+  .contact-btn:hover { border-color: var(--green); color: var(--green); }
+
+  .contact-btn.primary {
+    background: var(--green);
+    color: var(--bg);
+    border-color: var(--green);
+    font-weight: 700;
+  }
+
+  .contact-btn.primary:hover { background: #4fcb60; color: var(--bg); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .about-grid, .projects-grid, .skills-grid, .activities-summary, .activity-list { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: 1; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">~/kangsyoung</div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#awards">awards</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#activities">activities</a></li>
+    <li><a href="#vision">vision</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span class="terminal-title">bash — ~</span>
+      </div>
+      <div class="terminal-body" id="terminal-body"></div>
+    </div>
+    <div class="hero-tagline fade-in" id="hero-tagline" style="opacity:0; margin-top: 2.5rem;">
+      기술이 <strong>누군가의 문제를 실제로 풀어줄 때</strong> 가장 깊이 몰입하는 개발자.<br>
+      설계한 결과물이 <strong>사회에 긍정적인 변화를 일으키는 순간</strong>을 만들어갑니다.
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">// about</div>
+    <h2 class="section-title">강서영</h2>
+    <div class="about-grid">
+      <div class="about-card fade-in">
+        <div class="about-card-title">$ cat profile.json</div>
+        <p>
+          부산대학교 정보컴퓨터공학부<br>
+          인공지능 전공 · 4학년<br><br>
+          AI 기술을 실제 사회 문제 해결에 연결하는<br>
+          풀스택 개발자를 지향합니다.
+        </p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-card-title">$ cat keywords.txt</div>
+        <p>
+          <span style="color:var(--green)">#문제해결사</span> &nbsp;<span style="color:var(--green)">#도전러</span><br><br>
+          처음 접하는 기술도 필요하면 스스로 익히고,<br>
+          막힌 순간에 포기하지 않고 끝까지 파고드는 사람입니다.
+        </p>
+      </div>
+      <div class="about-card about-full fade-in">
+        <div class="about-card-title">$ git log --oneline --journey</div>
+        <p>
+          2023년 코딩을 거의 몰랐던 1학년 시절, 재활용 쓰레기로 수상 로봇을 만들어 해양로봇챌린지에서 금상을 받으며 기술이 사회 문제의 해결책이 될 수 있다는 것을 처음 실감했습니다. 이후 국내 해커톤부터 오스트리아 비엔나 국제학술대회까지, 도전이 주어지면 망설이지 않고 뛰어들며 결과물로 증명해왔습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-label">// projects</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🪞 Morning-Dash</div>
+          <span class="project-award award-silver">우수상</span>
+        </div>
+        <div class="project-period">2026.02 · 3박 4일 메이커톤 · 팀장</div>
+        <div class="project-desc">1인 가구 외출 최적화 스마트 미러. 얼굴 인식으로 사용자를 식별하고 날씨·교통·소지품·컨디션을 통합 분석해 외출 준비도 점수를 제공. Raspberry Pi ↔ AWS EC2 분산 아키텍처를 직접 설계해 CV 연산 부하를 해결.</div>
+        <div class="project-role"><span>역할</span> · 팀장 / 기획·설계 / Raspberry Pi 환경 구성 / CV 피로도 분석 / Flask 서버 통합</div>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">OpenCV</span>
+          <span class="tag">face_recognition</span><span class="tag">Raspberry Pi 5</span>
+          <span class="tag">AWS EC2</span><span class="tag">SQLite</span>
+          <span class="tag">TAGO API</span><span class="tag">Kakao API</span><span class="tag">OpenWeatherMap</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🌱 Pig.Fig.(피그피그)</div>
+          <span class="project-award award-ongoing">본선 진행 중</span>
+        </div>
+        <div class="project-period">2026.05 ~ 08 · PNU 창의융합AI해커톤 · 팀장</div>
+        <div class="project-desc">도심 유휴공간 기반 무화과 대리재배 + 게이미피케이션 모바일 플랫폼. Gemini API로 묘목 사진을 감성 일러스트로 변환, TensorFlow로 묘목 상태 자동 분석. 시니어 일자리·도심 공실·반려식물 수요를 하나로 연결.</div>
+        <div class="project-role"><span>역할</span> · 팀장 / Django 백엔드 / MySQL DB 설계 / Gemini API 연동 / TensorFlow 묘목 분석 / 배포</div>
+        <div class="tags">
+          <span class="tag">Django</span><span class="tag">React Native</span><span class="tag">MySQL</span>
+          <span class="tag">Gemini API</span><span class="tag">TensorFlow</span>
+          <span class="tag">Firebase</span><span class="tag">PythonAnywhere</span><span class="tag">Figma AI</span><span class="tag">Cursor</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🎮 ZeroDose</div>
+          <span class="project-award award-silver">Silver Award</span>
+        </div>
+        <div class="project-period">2025.05 ~ 08 · ICCAS 2025 · 4개 대학 연합</div>
+        <div class="project-desc">ESDM 기반 ASD 아동용 의료용 기능성 게임. Vertex AI 이미지 생성, Cloud Vision API 표정 인식, Gemini 성장 분석 접목. EKC 2025 오스트리아 비엔나 국제학술대회 영어 포스터 발표.</div>
+        <div class="project-role"><span>역할</span> · Django 백엔드 / MySQL DB 설계 / AWS S3 / 게임 2종 구현</div>
+        <div class="tags">
+          <span class="tag">Django</span><span class="tag">React</span><span class="tag">MySQL</span>
+          <span class="tag">AWS S3</span><span class="tag">Vertex AI</span>
+          <span class="tag">Cloud Vision API</span><span class="tag">Gemini</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🌊 MyWave</div>
+          <span class="project-award award-bronze">3등</span>
+        </div>
+        <div class="project-period">2025.09 · 당일 해커톤 · 4인 팀</div>
+        <div class="project-desc">부산 물놀이 통합 플랫폼. 공공데이터 기반 날씨·조류·수질 정보를 통합해 맞춤 물놀이 장소를 추천. 바이브코딩 활용 당일 해커톤 개발.</div>
+        <div class="project-role"><span>역할</span> · 기획 / 프론트엔드 개발</div>
+        <div class="tags">
+          <span class="tag">Next.js 15</span><span class="tag">TypeScript</span>
+          <span class="tag">Tailwind CSS</span><span class="tag">Zustand</span><span class="tag">Framer Motion</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🤖 해양로봇챌린지</div>
+          <span class="project-award award-gold">금상</span>
+        </div>
+        <div class="project-period">2023.08 · 2인 팀</div>
+        <div class="project-desc">재활용 쓰레기 소재로 제작한 수상 로봇. Arduino와 Dynamixel 모터 제어를 활용해 장애물 회피 및 정밀 후진 운동을 구현. 해양 쓰레기 문제를 기술로 해결하는 첫 경험.</div>
+        <div class="project-role"><span>역할</span> · 코딩 / 설계 / 조립 공동 담당</div>
+        <div class="tags">
+          <span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">Dynamixel Shield</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-header">
+          <div class="project-name">🏙️ Ocean Cities Challenges</div>
+          <span class="project-award award-silver">최우수상</span>
+        </div>
+        <div class="project-period">2025.01 · 1박 2일 · 팀장 · 5인 대학 연합</div>
+        <div class="project-desc">부산 중구를 워케이션 밸리로 재탄생시키는 도시재생 솔루션 제안. 일본 와카야마현 사례 등 국내외 벤치마킹을 통해 Work·Vacation 강화 전략을 도출.</div>
+        <div class="project-role"><span>역할</span> · 팀장 / 주제 선정 / 리서치 / 사례 조사</div>
+        <div class="tags">
+          <span class="tag">기획</span><span class="tag">리서치</span><span class="tag">도시재생</span><span class="tag">워케이션</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards">
+  <div class="container">
+    <div class="section-label">// awards</div>
+    <h2 class="section-title">Awards</h2>
+    <div class="timeline">
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2023.08.18</div>
+        <div class="timeline-title">제9회 해양로봇챌린지 금상</div>
+        <div class="timeline-org">부산광역시장</div>
+        <div class="timeline-desc">재활용 소재 수상 로봇 설계·제작·코딩</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2025.01.21</div>
+        <div class="timeline-title">2024 Ocean Cities Challenges 최우수상</div>
+        <div class="timeline-org">부산대학교 산학협력단장</div>
+        <div class="timeline-desc">부산 중구 워케이션 밸리 도시재생 솔루션 제안, 팀장 및 기획·리서치 담당</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2025.06.27</div>
+        <div class="timeline-title">AI+스마트 IoT 농촌 솔루션랩 경진대회 최우수상</div>
+        <div class="timeline-org">인제대학교 공학교육혁신센터장</div>
+        <div class="timeline-desc">딥러닝 기반 상품 인식·얼굴 인증 AI 기술을 활용한 노인 친화형 간편 무인점포 아이디어 제안</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2025.08.31</div>
+        <div class="timeline-title">ICCAS 2025 Silver Award (Excellence Prize)</div>
+        <div class="timeline-org">유럽한국여성과학기술인협회 (EKWSEA)</div>
+        <div class="timeline-desc">ESDM 기반 ASD 아동용 기능성 게임 'ZeroDose' 백엔드 개발 · EKC 2025 오스트리아 비엔나 포스터 발표</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2025.10.01</div>
+        <div class="timeline-title">2025 CSE TECHWEEK 해커톤 3등</div>
+        <div class="timeline-org">부산대학교 정보컴퓨터공학부장</div>
+        <div class="timeline-desc">공공데이터 기반 부산 물놀이 통합 플랫폼 'MyWave' 기획 및 프론트엔드 개발</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2026.01.30</div>
+        <div class="timeline-title">DH 이해하기 III 장려상</div>
+        <div class="timeline-org">부산대학교 디지털인문학센터장</div>
+        <div class="timeline-desc">유튜브 댓글 데이터 분석 기반 부산 젊은 도시 인식 전환 콘텐츠 제작</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2026.02.06</div>
+        <div class="timeline-title">2025 라이프스타일 스마트 기기 메이커톤 우수상</div>
+        <div class="timeline-org">부산대학교 공학교육혁신센터장</div>
+        <div class="timeline-desc">1인 가구 외출 최적화 스마트 미러 'Morning-Dash' 팀장, 기획·CV·Flask 서버 통합</div>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-date">2026.05.21</div>
+        <div class="timeline-title">제7회 PNU 창의융합AI해커톤 예선 우수상</div>
+        <div class="timeline-org">부산대학교 AI융합교육원장</div>
+        <div class="timeline-desc">도심 유휴공간 기반 무화과 대리재배 플랫폼 'Pig.Fig.' 팀장·백엔드 개발 · 본선 진행 중</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">// skills</div>
+    <h2 class="section-title">Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">LANGUAGES</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-lang">Python</span>
+          <span class="skill-badge badge-lang">C++</span>
+          <span class="skill-badge badge-lang">TypeScript</span>
+          <span class="skill-badge badge-lang">JavaScript</span>
+          <span class="skill-badge badge-lang">SQL</span>
+          <span class="skill-badge badge-lang">Verilog</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">FRAMEWORKS</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-fw">Django</span>
+          <span class="skill-badge badge-fw">Flask</span>
+          <span class="skill-badge badge-fw">React</span>
+          <span class="skill-badge badge-fw">React Native</span>
+          <span class="skill-badge badge-fw">Next.js</span>
+          <span class="skill-badge badge-fw">Tailwind CSS</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">AI / CV</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-ai">OpenCV</span>
+          <span class="skill-badge badge-ai">face_recognition</span>
+          <span class="skill-badge badge-ai">TensorFlow</span>
+          <span class="skill-badge badge-ai">Vertex AI</span>
+          <span class="skill-badge badge-ai">Cloud Vision API</span>
+          <span class="skill-badge badge-ai">Gemini API</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">HARDWARE</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-hw">Raspberry Pi 5</span>
+          <span class="skill-badge badge-hw">Arduino</span>
+          <span class="skill-badge badge-hw">STM32</span>
+          <span class="skill-badge badge-hw">FPGA</span>
+          <span class="skill-badge badge-hw">RTOS</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">INFRA / TOOLS</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-tool">AWS EC2</span>
+          <span class="skill-badge badge-tool">AWS S3</span>
+          <span class="skill-badge badge-tool">MySQL</span>
+          <span class="skill-badge badge-tool">SQLite</span>
+          <span class="skill-badge badge-tool">Firebase</span>
+          <span class="skill-badge badge-tool">Git</span>
+          <span class="skill-badge badge-tool">GitHub</span>
+          <span class="skill-badge badge-tool">Cursor</span>
+        </div>
+      </div>
+      <div class="skill-group fade-in">
+        <div class="skill-group-title">APIs</div>
+        <div class="skill-list">
+          <span class="skill-badge badge-tool">TAGO</span>
+          <span class="skill-badge badge-tool">Kakao</span>
+          <span class="skill-badge badge-tool">OpenWeatherMap</span>
+          <span class="skill-badge badge-tool">공공데이터포털</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities">
+  <div class="container">
+    <div class="section-label">// activities</div>
+    <h2 class="section-title">비교과 활동</h2>
+
+    <div class="activities-summary">
+      <div class="stat-card fade-in">
+        <div class="stat-num">267h</div>
+        <div class="stat-label">총 이수 시간</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="stat-num">2023~</div>
+        <div class="stat-label">꾸준한 참여 연도</div>
+      </div>
+    </div>
+
+    <div class="activity-section-title">// AI · 개발 관련</div>
+    <div class="activity-list">
+      <div class="activity-item fade-in">
+        <span class="activity-name">AI·디지털 역량 강화 교육 (디지털 도구 활용)</span>
+        <span class="activity-hours">5h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">AI·디지털 역량 강화 교육 (생성형 AI 활용)</span>
+        <span class="activity-hours">5h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">AI·디지털 역량 강화 교육 (생성형 AI 심화)</span>
+        <span class="activity-hours">5h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">AI융합특강 (에이전틱 AI와 바이브코딩)</span>
+        <span class="activity-hours">3h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">AWS 아키텍트와 함께하는 생성형 AI 실무특강</span>
+        <span class="activity-hours">3h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">2025 정컴 바이브코딩 특강 및 해커톤 대회</span>
+        <span class="activity-hours">8h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">2024 PNU Mini Bootcamp (코딩부트캠프)</span>
+        <span class="activity-hours">21h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">SW 데이터분석 준전문가(ADsP) 준비과정</span>
+        <span class="activity-hours">30h</span>
+      </div>
+    </div>
+
+    <div class="activity-section-title">// 취업 · 진로</div>
+    <div class="activity-list">
+      <div class="activity-item fade-in">
+        <span class="activity-name">대기업 취업특화 프로그램 [IT 산업별 채용트렌드]</span>
+        <span class="activity-hours">2h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">PNU SW취업특강 (아마존 가는 길)</span>
+        <span class="activity-hours">2h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">대기업 직무적성검사 특강 (추리/수리)</span>
+        <span class="activity-hours">6h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">2025 학생포트폴리오 경진대회 참가</span>
+        <span class="activity-hours">—</span>
+      </div>
+    </div>
+
+    <div class="activity-section-title">// 대회 · 공모전</div>
+    <div class="activity-list">
+      <div class="activity-item fade-in">
+        <span class="activity-name">SW+X 문제해결 경진대회</span>
+        <span class="activity-hours">—</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">캡스톤디자인 경진대회</span>
+        <span class="activity-hours">—</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">DH 이해하기 III: 인문 데이터로 부산(대) 그려보기</span>
+        <span class="activity-hours">8h</span>
+      </div>
+      <div class="activity-item fade-in">
+        <span class="activity-name">2026 K-Culture 아이디어톤</span>
+        <span class="activity-hours">8h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISION -->
+<section id="vision">
+  <div class="container">
+    <div class="section-label">// vision</div>
+    <h2 class="section-title">나의 꿈</h2>
+    <div class="vision-block fade-in">
+      <p>
+        저는 <strong>기술이 누군가의 문제를 실제로 풀어줄 때</strong> 가장 깊이 몰입하는 사람입니다. 2023년 재활용 쓰레기로 수상 로봇을 만들며 해양 쓰레기라는 사회 문제 앞에서 제가 배운 기술이 해결책이 될 수 있다는 것을 처음 실감했습니다. 그 보람이 지금까지의 모든 도전의 출발점이었습니다.
+      </p>
+      <p>
+        기회가 오면 망설이지 않고 뛰어들었습니다. 아무것도 모른 채 ICCAS 2025에 참가해 백엔드를 처음부터 익히며 ASD 아동을 위한 게임을 완성했고, 오스트리아 비엔나에서 영어로 발표했습니다. 막힌 순간마다 포기하지 않고 끝까지 부딪혀 결과물을 만들어냈다는 경험은 지금도 제게 가장 단단한 자산입니다.
+      </p>
+      <p>
+        제 꿈은 <strong>설계한 결과물이 사회에 긍정적인 변화를 일으키는 순간을 계속 만들어가는 것</strong>입니다. AI 기술로 더 많은 사람의 일상을 편리하게 바꾸고, 기술이 가장 많은 사람에게 닿을 수 있는 곳에서 일하고 싶습니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="section-label" style="text-align:center">// contact</div>
+      <h2 class="section-title" style="text-align:center">함께 만들어갑시다</h2>
+      <p>
+        기술로 사회 문제를 풀고 싶은 개발자를 찾고 계신다면<br>
+        언제든지 연락해 주세요.
+      </p>
+      <div class="contact-links">
+        <a href="https://github.com/KangSY01" target="_blank" class="contact-btn primary">→ GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="mono">© 2026 강서영 · Built with passion, not templates.</span>
+</footer>
+
+<script>
+const lines = [
+  { type: 'cmd', text: '$ whoami' },
+  { type: 'out', html: '<span class="output-str">강서영</span> <span class="output-comment">// AI Developer · Problem Solver</span>' },
+  { type: 'blank' },
+  { type: 'cmd', text: '$ cat about.json' },
+  { type: 'out', html: '{' },
+  { type: 'out', html: '  <span class="output-key">"university"</span>: <span class="output-str">"부산대학교 정보컴퓨터공학부 인공지능전공"</span>,' },
+  { type: 'out', html: '  <span class="output-key">"grade"</span>: <span class="output-str">"4학년"</span>,' },
+  { type: 'out', html: '  <span class="output-key">"focus"</span>: <span class="output-str">"AI × 실사회 문제 해결"</span>' },
+  { type: 'out', html: '}' },
+  { type: 'blank' },
+  { type: 'cmd', text: '$ ls awards/' },
+  { type: 'out', html: '<span class="output-green">gold</span>_해양로봇챌린지 &nbsp;<span class="output-purple">silver</span>_ICCAS2025 &nbsp;최우수_OceanCities &nbsp;최우수_농촌솔루션랩 &nbsp;우수_메이커톤' },
+  { type: 'blank' },
+  { type: 'cmd', text: '$ echo $DREAM' },
+  { type: 'out', html: '<span class="output-str">"기술이 사회를 바꾸는 순간을 계속 만들어가는 개발자"</span>' },
+  { type: 'cursor' },
+];
+
+const body = document.getElementById('terminal-body');
+let lineIdx = 0;
+
+function renderLine(line) {
+  const el = document.createElement('div');
+  el.className = 'terminal-line';
+  if (line.type === 'blank') {
+    el.innerHTML = '&nbsp;';
+  } else if (line.type === 'cursor') {
+    el.innerHTML = '<span class="prompt">$</span> <span class="cursor"></span>';
+  } else if (line.type === 'out') {
+    el.innerHTML = line.html;
+  }
+  return el;
+}
+
+function typeCmd(line, done) {
+  const el = document.createElement('div');
+  el.className = 'terminal-line';
+  body.appendChild(el);
+  let i = 0;
+  const t = setInterval(() => {
+    const typed = line.text.slice(2, i + 2);
+    el.innerHTML = '<span class="prompt">' + line.text.slice(0, 2) + '</span><span class="cmd">' + typed + '</span>' + (i < line.text.length - 2 ? '<span class="cursor"></span>' : '');
+    i++;
+    if (i > line.text.length - 2) {
+      clearInterval(t);
+      el.innerHTML = '<span class="prompt">' + line.text.slice(0, 2) + '</span><span class="cmd">' + line.text.slice(2) + '</span>';
+      setTimeout(done, 80);
+    }
+  }, 40);
+}
+
+function nextLine() {
+  if (lineIdx >= lines.length) {
+    setTimeout(() => {
+      const tag = document.getElementById('hero-tagline');
+      tag.style.opacity = '1';
+      tag.style.transform = 'translateY(0)';
+      tag.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    }, 300);
+    return;
+  }
+  const line = lines[lineIdx++];
+  if (line.type === 'cmd') {
+    typeCmd(line, () => setTimeout(nextLine, 120));
+  } else {
+    const el = renderLine(line);
+    body.appendChild(el);
+    setTimeout(nextLine, line.type === 'blank' ? 60 : 80);
+  }
+}
+
+window.addEventListener('load', () => setTimeout(nextLine, 400));
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
